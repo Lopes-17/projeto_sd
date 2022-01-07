@@ -1,15 +1,15 @@
-public class Viagem {
+public class Voo {
     private String origem;
     private String destino;
     private int capacidade;
 
-    public Viagem(){
+    public Voo(){
         this.origem = "";
         this.destino = "";
         this.capacidade = 0;
     }
 
-    public Viagem(String origem, String destino, int capacidade){
+    public Voo(String origem, String destino, int capacidade){
         this.origem = origem;
         this.destino = destino;
         this.capacidade = capacidade;
@@ -43,4 +43,9 @@ public class Viagem {
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+    /*
+    public Voo clone() {
+        return new Voo(this);
+    }
+     */
 }

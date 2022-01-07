@@ -1,6 +1,10 @@
+import java.util.List;
+
 public class User {
     private String nome;
     private String pass;
+    private List<Viagem> viagens;
+    
 
     public String getNome() {
         return nome;
