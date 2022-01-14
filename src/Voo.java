@@ -2,6 +2,14 @@ public class Voo {
     private String origem;
     private String destino;
     private int capacidade;
+    private Estado estado;
+
+
+    public enum Estado{
+        POR_DECORRER,
+        CANCELADO,
+        CONCLUIDO
+    }
 
     public Voo(){
         this.origem = "";
@@ -13,6 +21,11 @@ public class Voo {
         this.origem = origem;
         this.destino = destino;
         this.capacidade = capacidade;
+        this.estado= Estado.POR_DECORRER;
+    }
+
+    public void cancela(){
+        this.estado=Estado.CANCELADO;
     }
 
     public String getOrigem() {
@@ -48,4 +61,14 @@ public class Voo {
         return new Voo(this);
     }
      */
+
+    @Override
+    public String toString() {
+        return "Voo{" +
+                "origem='" + origem + '\'' +
+                ", destino='" + destino + '\'' +
+                ", capacidade=" + capacidade +
+                ", estado=" + estado +
+                '}';
+    }
 }

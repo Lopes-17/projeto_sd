@@ -1,10 +1,13 @@
+import java.time.LocalDate;
+import java.util.Map;
+
 public class Admin extends User{
-       /*
-    private static Viagem addViagem(String origem, String destino, int capacidade){
-        Viagem viagem = new Viagem(origem, destino, capacidade);
-        return viagem;
+
+
+    public Admin(String username,String password){
+        super(username,password);
     }
 
-        */
+
 
 }
