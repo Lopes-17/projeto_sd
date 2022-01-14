@@ -1,4 +1,6 @@
-public class Voo {
+import java.io.Serializable;
+
+public class Voo implements Serializable {
     private String origem;
     private String destino;
     private int capacidade;
@@ -24,6 +26,28 @@ public class Voo {
         this.estado= Estado.POR_DECORRER;
     }
 
+    public Voo(Voo voo){
+        this.origem = voo.getOrigem();
+        this.destino = voo.getDestino();
+        this.capacidade = voo.getCapacidade();
+        this.estado = voo.estado;
+    }
+
+    public void marcarLugar(){
+        this.capacidade-=1;
+    }
+
+    public void desmarcarLugar(){
+        this.capacidade+=1;
+    }
+
+    public boolean semLugares(){
+        return this.capacidade ==0;
+    }
+
+    public boolean isCancelado (){
+        return estado.equals(Estado.CANCELADO);
+    }
     public void cancela(){
         this.estado=Estado.CANCELADO;
     }
@@ -52,15 +76,11 @@ public class Voo {
         this.capacidade = capacidade;
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-    /*
+
     public Voo clone() {
         return new Voo(this);
     }
-     */
+
 
     @Override
     public String toString() {

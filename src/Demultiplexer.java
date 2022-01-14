@@ -64,8 +64,13 @@ public class Demultiplexer implements AutoCloseable{
         this.conn.send(tag,username,data);
     }
 
-    public void sendViagem(int tag, String username, List<String> viagens) throws IOException {
-        this.conn.sendViagem(tag,username,viagens);
+    public void send(int tag, String username) throws IOException {
+        this.conn.send(tag,username);
+    }
+
+
+    public void sendViagem(int tag, String username, PercursoCliente percurso) throws IOException {
+        this.conn.sendViagem(tag,username,percurso);
     }
 
     public void sendString (int tag,String username,String data) throws IOException {

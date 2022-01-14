@@ -7,24 +7,14 @@
       <change beforePath="$PROJECT_DIR$/src/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cliente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Connection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Contas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Contas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Demultiplexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Demultiplexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Local.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Local.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Percurso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PercursoCliente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Reservas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Reservas.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Servidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servidor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Viagem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Viagem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Voo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Voo.java" afterDir="false" />
-    </list>
-    <list id="adcd93e6-3bb4-4ccf-b2fd-f159ac3f6d11" name="Changes by antoniolmf" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Contas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Contas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Reservas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Reservas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Servidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servidor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Viagem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Viagem.java" afterDir="false" />
-    </list>
-    <list id="d8848d9f-5375-44b5-b909-1cf3b4a7b290" name="Changes by joao" comment="">
-      <change beforePath="$PROJECT_DIR$/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/User.java" afterDir="false" />
-    </list>
-    <list id="25a7e615-1648-4ce1-8853-94f96ed92540" name="Changes by lopes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Connection.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,77 +38,6 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/User.java">
-      <ranges>
-        <range start1="0" end1="0" start2="0" end2="2" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="1" end1="1" start2="3" end2="5" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="5" end1="7" start2="9" end2="29" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="23" end1="23" start2="45" end2="52" changelist="d8848d9f-5375-44b5-b909-1cf3b4a7b290" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/src/Servidor.java">
-      <ranges>
-        <range start1="0" end1="4" start2="0" end2="5" changelist="adcd93e6-3bb4-4ccf-b2fd-f159ac3f6d11" />
-        <range start1="6" end1="6" start2="7" end2="12" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="12" end1="13" start2="18" end2="31" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="15" end1="15" start2="33" end2="36" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="16" end1="16" start2="37" end2="38" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="25" end1="28" start2="47" end2="52" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="29" end1="30" start2="53" end2="54" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="33" end1="33" start2="57" end2="161" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/src/Viagem.java">
-      <ranges>
-        <range start1="2" end1="2" start2="2" end2="3" changelist="adcd93e6-3bb4-4ccf-b2fd-f159ac3f6d11" />
-        <range start1="7" end1="7" start2="8" end2="59" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/src/Reservas.java">
-      <ranges>
-        <range start1="1" end1="3" start2="1" end2="3" changelist="adcd93e6-3bb4-4ccf-b2fd-f159ac3f6d11" />
-        <range start1="5" end1="6" start2="5" end2="6" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="8" end1="9" start2="8" end2="9" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="10" end1="10" start2="10" end2="11" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="12" end1="12" start2="13" end2="19" changelist="adcd93e6-3bb4-4ccf-b2fd-f159ac3f6d11" />
-        <range start1="13" end1="13" start2="20" end2="23" changelist="adcd93e6-3bb4-4ccf-b2fd-f159ac3f6d11" />
-        <range start1="16" end1="16" start2="26" end2="29" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="17" end1="17" start2="30" end2="32" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="21" end1="21" start2="36" end2="43" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="22" end1="22" start2="44" end2="92" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/src/Connection.java">
-      <ranges>
-        <range start1="0" end1="0" start2="0" end2="2" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="2" end1="2" start2="4" end2="7" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="10" end1="11" start2="15" end2="17" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="12" end1="13" start2="18" end2="18" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="15" end1="16" start2="20" end2="21" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="17" end1="18" start2="22" end2="22" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="20" end1="21" start2="24" end2="24" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="22" end1="22" start2="25" end2="37" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="30" end1="32" start2="45" end2="47" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="34" end1="35" start2="49" end2="64" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="38" end1="39" start2="67" end2="67" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="44" end1="45" start2="72" end2="73" changelist="25a7e615-1648-4ce1-8853-94f96ed92540" />
-        <range start1="48" end1="49" start2="76" end2="143" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="51" end1="52" start2="145" end2="145" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="56" end1="60" start2="149" end2="177" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="63" end1="64" start2="180" end2="181" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="67" end1="68" start2="184" end2="185" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/src/Contas.java">
-      <ranges>
-        <range start1="3" end1="4" start2="3" end2="4" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="16" end1="16" start2="16" end2="22" changelist="adcd93e6-3bb4-4ccf-b2fd-f159ac3f6d11" />
-        <range start1="19" end1="20" start2="25" end2="27" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-        <range start1="21" end1="21" start2="28" end2="46" changelist="6aa175af-ef7a-4bb7-8501-bf1a33ffa240" />
-      </ranges>
-    </file>
   </component>
   <component name="ProjectId" id="23NFfKl9WE3DFkyfiTdwXq4UY14" />
   <component name="ProjectViewState">
@@ -149,13 +68,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -180,7 +101,8 @@
       <workItem from="1641581076157" duration="3949000" />
       <workItem from="1641592441167" duration="2774000" />
       <workItem from="1641595459813" duration="798000" />
-      <workItem from="1642083810594" duration="31879000" />
+      <workItem from="1642083810594" duration="32076000" />
+      <workItem from="1642152555858" duration="22951000" />
     </task>
     <servers />
   </component>

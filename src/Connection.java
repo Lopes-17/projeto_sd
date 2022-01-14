@@ -14,6 +14,7 @@ public class Connection implements AutoCloseable{
     private final ReentrantLock writeLock = new ReentrantLock();
 
 
+
     public static class FrameCliente {
         public int tag;
         public byte[] data;
@@ -47,6 +48,18 @@ public class Connection implements AutoCloseable{
         send(new FrameCliente(tag, data));
     }
 
+    public void send (int tag, String username) throws IOException {
+        try {
+            writeLock.lock();
+            this.dataOutputStream.writeInt(tag);
+            this.dataOutputStream.writeUTF(username);
+            this.dataOutputStream.flush();
+        }
+        finally {
+            writeLock.unlock();
+        }
+    }
+
     public void send (int tag,String username,byte[]data) throws IOException{
         try {
             writeLock.lock();
@@ -74,18 +87,13 @@ public class Connection implements AutoCloseable{
         }
     }
 
-    public void sendViagem(int tag, String username, List<String> viagens)throws IOException {
+    public void sendViagem(int tag, String username, PercursoCliente percursoCliente)throws IOException {
         try {
             writeLock.lock();
             this.dataOutputStream.writeInt(tag);
             this.dataOutputStream.writeUTF(username);
-            this.dataOutputStream.writeInt(viagens.size());
-            for(String viagem : viagens)
-                this.dataOutputStream.writeUTF(viagem);
-            LocalDate date = LocalDate.now();
-            this.dataOutputStream.writeUTF(date.toString());
+            percursoCliente.serialize(this.dataOutputStream);
             this.dataOutputStream.flush();
-
         }
         finally {
             writeLock.unlock();
@@ -104,6 +112,7 @@ public class Connection implements AutoCloseable{
             writeLock.unlock();
         }
     }
+
 
     public void sendVoo(int tag, String username, String origem, String destino, int capacidade)throws IOException {
         try {
@@ -146,24 +155,22 @@ public class Connection implements AutoCloseable{
         try {
             readLock.lock();
             tag = this.dataInputStream.readInt();
+            System.out.println(tag);
             username = this.dataInputStream.readUTF();
             switch (tag) {
                 case 0:
                 case 1:
+                case 8:
                 case 3: {
-                    String string = this.dataInputStream.readUTF();
-                    return new FrameServidor(tag, username, string);
+                    String value = this.dataInputStream.readUTF();
+                    return new FrameServidor(tag, username, value);
                 }
                 case 2: {
-                    int len = this.dataInputStream.readInt();
-                    List<String> listViagem = new ArrayList<>();
-                    for (int i = 0; i < len; i++) {
-                        listViagem.add(dataInputStream.readUTF());
-                    }
-                    LocalDate localDate = LocalDate.parse(dataInputStream.readUTF());
-                    System.out.println("DATE IS ->" + localDate);
-                    return new FrameServidor(tag, username, listViagem);
+                    PercursoCliente percursoCliente = PercursoCliente.deserialize(this.dataInputStream);
+                    return new FrameServidor(tag, username, percursoCliente);
                 }
+                case 10:
+                case 7:
                 case 4:
                     return new FrameServidor(tag,username,new byte[0]);
                 case 5:
@@ -172,6 +179,9 @@ public class Connection implements AutoCloseable{
                     int capacidade = this.dataInputStream.readInt();
                     Voo voo = new Voo(origem,destino,capacidade);
                     return new FrameServidor(tag,username,voo);
+                case 6:
+                    LocalDate date = LocalDate.parse(username);
+                    return new FrameServidor(tag,"",date);
             }
         }
 

@@ -1,23 +1,48 @@
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class User {
+public class User implements Serializable {
     private String nome;
     private String pass;
     private Map<Integer,Viagem> viagens; // key -> idReserva
+    private boolean loggedIn;
 
-    public User(String nome, String pass){
+    public User(String nome, String pass, boolean loggedIn){
         this.nome = nome;
         this.pass = pass;
         this.viagens = new HashMap<>();
+        this.loggedIn = loggedIn;
     }
 
-    public void cancelaViagem (int idReserva){
+    public boolean isLoggedIn(){
+        return loggedIn;
+    }
+
+    public void logIn(){
+        loggedIn = true;
+    }
+    public void logOut(){
+        loggedIn = false;
+    }
+
+    public void cancelaViagem (int idReserva)throws Exception{
+        if (!viagens.containsKey(idReserva))throw new Exception("ERRO - ID de reserva inválido");
         Viagem v = viagens.get(idReserva);
-        v.cancelar();
+        if (!LocalDate.now().isAfter(v.getDia())) v.cancelar();
+        else throw new Exception("ERRO - Impossível cancelar viagem");
+    }
+
+    public void addViagem(Viagem viagem){
+        this.viagens.put(viagem.getIdReserva(),viagem);
+    }
+
+    public List<Viagem> getViagens (){
+        return new ArrayList<>(viagens.values());
     }
 
     public List<Voo> getVoos(){

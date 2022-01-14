@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class Local {
+public class Local implements Serializable {
     private String nome;
     private Map<Local,Voo> destinosPossiveis;
 
@@ -23,21 +24,23 @@ public class Local {
     }
 
 
-    public void allPercursos(Local local){
+    public List<List<String>> allPercursos(Local local){
+        List<List<String>> res = new ArrayList<>();
         if(destinosPossiveis.containsKey(local)){
-            System.out.println(nome + " ->" + local.nome);
+            res.add(Arrays.asList(nome, local.nome));
         }
         for (Local l : destinosPossiveis.keySet()){
             if (!l.equals(local)) {
-                if (l.destinosPossiveis.containsKey(local)) System.out.println(nome + " ->" + l.nome + "->" + local.nome);
+                if (l.destinosPossiveis.containsKey(local)) res.add(Arrays.asList(nome , l.nome ,local.nome));
                 for (Local l2 : l.destinosPossiveis.keySet()) {
                     if (!l2.equals(local)) {
                         if (l2.destinosPossiveis.containsKey(local))
-                            System.out.println(nome + " ->" + l.nome + "->" + l2.nome + "->" + local.nome);
+                            res.add(Arrays.asList(nome , l.nome , l2.nome ,local.nome));
                     }
                 }
             }
         }
+        return res;
     }
 }
 
