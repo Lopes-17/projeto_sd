@@ -25,8 +25,6 @@ public class Servidor {
 
     public static void main(String[] args) {
         try {
-            ss = new ServerSocket(12345);
-
             Reservas reservas;
             if (!Files.exists(Paths.get(contasFile))) {
                 reservas = new Reservas();
@@ -54,6 +52,8 @@ public class Servidor {
                 contas.serialize("contas.ser");
             }
             else contas = Contas.deserialize(contasFile);
+            ss = new ServerSocket(12345);
+
             //if (reservas.getAllCaminhos("Porto","Paris")) return;
             while (true) {
                 Socket socket = ss.accept();
@@ -101,7 +101,9 @@ public class Servidor {
             while (!out) {
                 try {
                     Connection.FrameServidor frame = connection.receive();
-                    if (frame.tag == 0) {
+                    int tag = frame.tag;
+                    if (tag == Constantes.iniciarSessao) {
+
                         String username = frame.username;
                         String password = (String) frame.data;
                         System.out.println(username);
@@ -110,70 +112,71 @@ public class Servidor {
                             boolean loginValido = contas.autenticarUser(username, password);
                             if (loginValido) {
                                 String message = contas.isAdmin(username) ? "OK_ADMIN" : "OK_USER";
-                                connection.send(0, message.getBytes());
+                                connection.send(tag, message.getBytes());
                             }
-                            else connection.send(0,  "ERRO - Palavra passe errada".getBytes());
+                            else connection.send(tag,  "ERRO - Palavra passe errada".getBytes());
                         }
                         catch (Exception e){
                             System.out.println("ERRO");
-                            connection.send(0,e.getMessage().getBytes());
+                            connection.send(tag,e.getMessage().getBytes());
                         }
                     }
 
-                    if (frame.tag == 1) {
+                    if (tag == Constantes.criarConta) {
                         String username = frame.username;
                         String password = (String) frame.data;
                         try {
                             contas.adicionarUser(username, password);
-                            connection.send(1,"OK".getBytes());
+                            connection.send(tag,"OK".getBytes());
                         }
                         catch (Exception e){
-                            connection.send(1,"Já existe um utilizador com esse username".getBytes());
+                            connection.send(tag,"Já existe um utilizador com esse username".getBytes());
                             System.out.println("ERRO");
                         }
                     }
 
-                    if (frame.tag == 2){
+                    if (tag == Constantes.reservarViagem){
                         PercursoCliente percursoCliente = (PercursoCliente) frame.data;
                         List<String> listDestinos = percursoCliente.percurso;
                         if (reservas.validarDestinos(listDestinos)){
                             try {
                                 Viagem viagem = reservas.marcarViagem(listDestinos,percursoCliente.inicio,percursoCliente.fim);
-                                connection.send(2,String.valueOf(viagem.getIdReserva()).getBytes());
+                                connection.send(tag,String.valueOf(viagem.getIdReserva()).getBytes());
                                 contas.addViagem(frame.username,viagem);
                                 System.out.println(viagem);
                             }
                             catch (Exception e){
-                                connection.send(2,e.getMessage().getBytes());
+                                connection.send(tag,e.getMessage().getBytes());
                             }
                         }
                         else{
                             System.out.println("ERRO");
-                            connection.send(2,"ERRO - Destino(s) inválido(s)".getBytes());
+                            connection.send(tag,"ERRO - Destino(s) inválido(s)".getBytes());
                         }
 
                     }
 
-                    if (frame.tag == 3){
+                    if (tag == Constantes.cancelarViagem){
                         int id = Integer.parseInt((String) frame.data);
                         String username = frame.username;
                         try {
                             contas.cancelaViagem(username, id);
-                            connection.send(3,  "OK".getBytes());
+                            connection.send(tag,  "OK".getBytes());
                         }
                         catch (Exception e){
-                            connection.send(3,  e.getMessage().getBytes());
+                            connection.send(tag,  e.getMessage().getBytes());
                             System.out.println("ERRO");
                         }
                     }
-                    if (frame.tag == 4){
+                    if (tag == Constantes.voosExistentes){
                         List<Voo> voosDiarios = reservas.getVoosDiarios();
-                        if(voosDiarios.size()==0) connection.send(4,  "Lista Vazia".getBytes());
+                        if(voosDiarios.size()==0) connection.send(tag,  "Lista Vazia".getBytes());
                         else {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             ObjectOutputStream oos = new ObjectOutputStream(baos);
                             oos.writeInt(voosDiarios.size());
                             for (Voo voo : voosDiarios){
+                                System.out.println("CAPACIDADE ->" + voo.getCapacidade());
                                 String origem = voo.getOrigem();
                                 String destino = voo.getDestino();
                                 oos.writeUTF(origem);
@@ -181,21 +184,27 @@ public class Servidor {
                             }
                             oos.flush();
                             byte[] bytes= baos.toByteArray();
-                            connection.send(4, bytes);
+                            connection.send(tag, bytes);
                         }
                     }
 
-                    if (frame.tag == 5){
+                    if (tag == Constantes.inserirVoo){
                         Voo voo = (Voo)frame.data;
-                        System.out.println(voo);
-                        reservas.adicionarVoo(voo);
-                        connection.send(5, "OK".getBytes());
+                        try {
+                            reservas.adicionarVoo(voo);
+                            System.out.println("OKAY");
+                            connection.send(tag, "OK".getBytes());
+                        }
+                        catch (Exception e){
+                            System.out.println("ERRO");
+                            connection.send(tag,e.getMessage().getBytes());
+                        }
                     }
-                    if (frame.tag == 6){
+                    if (tag == Constantes.encerrarDia){
                         LocalDate date = (LocalDate) frame.data;
                         reservas.cancelarDia(date);
                     }
-                    if (frame.tag == 7){
+                    if (tag == Constantes.viagensReservadas){
                         List<Viagem> viagens = contas.getViagens(frame.username);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -215,10 +224,10 @@ public class Servidor {
                         }
                         oos.flush();
                         byte[] bytes= baos.toByteArray();
-                        connection.send(7, bytes);
+                        connection.send(tag, bytes);
                         System.out.println(viagens);
                     }
-                    if (frame.tag == 8){
+                    if (tag == Constantes.allPercursos){
                         String origem = frame.username;
                         String destino = (String) frame.data;
                         List<List<String>> allCaminhos = reservas.getAllCaminhos(origem,destino);
@@ -248,9 +257,9 @@ public class Servidor {
                         oos.flush();
 
                         byte[]bytes = baos.toByteArray();
-                        connection.send(8,bytes);
+                        connection.send(tag,bytes);
                     }
-                    if (frame.tag == 10){
+                    if (tag == Constantes.terminarSessao){
                         contas.logout(frame.username);
                         writeFile(contas,reservas);
                         out = true;

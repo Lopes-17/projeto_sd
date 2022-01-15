@@ -50,8 +50,10 @@ public class Cliente {
                 e.printStackTrace();
             }
             try {
+                int tag;
                 switch (opcao) {
                     case "1": {
+                        tag = Constantes.reservarViagem;
                         //Reservar viagem
                         System.out.print("Origem:");
                         String origem = in.readLine();
@@ -75,8 +77,8 @@ public class Cliente {
                         LocalDate inicio = askData(in,"Inicio:");
                         LocalDate fim = askData(in,"Fim:");
                         PercursoCliente percursoCliente = new PercursoCliente(listVoos,inicio,fim);
-                        demultiplexer.sendViagem(2,username,percursoCliente);
-                        String resposta = new String(demultiplexer.receive(2));
+                        demultiplexer.sendViagem(tag,username,percursoCliente);
+                        String resposta = new String(demultiplexer.receive(tag));
                         if (resposta.startsWith("ERRO")){
                             System.out.println(resposta);
                         }
@@ -85,20 +87,22 @@ public class Cliente {
                         break;
                     }
                     case "2": {
+                        tag = Constantes.cancelarViagem;
                         //Cancelar Viagem
                         System.out.print("Id Viagem:");
                         String id = in.readLine();
-                        demultiplexer.sendString(3, username, id);
-                        String resposta = new String(demultiplexer.receive(3));
+                        demultiplexer.sendString(tag, username, id);
+                        String resposta = new String(demultiplexer.receive(tag));
                         if (resposta.startsWith("ERRO"))
                             System.out.println(resposta);
                         else System.out.println("Viagem cancelada com sucesso");
                         break;
                     }
                     case "3": {
+                        tag = Constantes.voosExistentes;
                         //Voos Existentes
-                        demultiplexer.send(4, username);
-                        byte[]array = demultiplexer.receive(4);
+                        demultiplexer.send(tag, username);
+                        byte[]array = demultiplexer.receive(tag);
                         ByteArrayInputStream bis = new ByteArrayInputStream(array);
                         ObjectInput input = new ObjectInputStream(bis);
                         int len = input.readInt();
@@ -111,8 +115,10 @@ public class Cliente {
                         break;
                     }
                     case "4":{
-                        demultiplexer.send(7,username);
-                        byte[]array = demultiplexer.receive(7);
+                        tag = Constantes.viagensReservadas;
+                        //Viagens Reservadas
+                        demultiplexer.send(tag,username);
+                        byte[]array = demultiplexer.receive(tag);
                         ByteArrayInputStream bis = new ByteArrayInputStream(array);
                         ObjectInput input = new ObjectInputStream(bis);
                         int len = input.readInt();
@@ -137,12 +143,14 @@ public class Cliente {
                         break;
                     }
                     case "5":{
+                        tag = Constantes.allPercursos;
+                        //Todos os percursos
                         System.out.print("Origem:");
                         String origem = in.readLine();
                         System.out.print("Destino:");
                         String destino = in.readLine();
-                        demultiplexer.sendString(8,origem,destino);
-                        byte[]array = demultiplexer.receive(8);
+                        demultiplexer.sendString(tag,origem,destino);
+                        byte[]array = demultiplexer.receive(tag);
                         ByteArrayInputStream bis = new ByteArrayInputStream(array);
                         ObjectInput input = new ObjectInputStream(bis);
                         short lenLocais = input.readShort();
@@ -168,8 +176,9 @@ public class Cliente {
 
                     }
                     case "6": {
+                        tag = Constantes.terminarSessao;
                         //Terminar Sessão
-                        demultiplexer.send(10,username);
+                        demultiplexer.send(tag,username);
                         out = true;
                         break;
                     }
@@ -233,19 +242,27 @@ public class Cliente {
             System.out.println("Escolha uma opção");
             prompt();
             try {
+                int tag;
                 opcao = in.readLine();
                 switch (opcao) {
                     case "1": {
+                        tag = Constantes.inserirVoo;
+                        //INSERIR VOO
                         System.out.println("INSERIR VOO");
                         System.out.print("Origem:");
                         String origem = in.readLine();
                         System.out.print("Destino:");
                         String destino = in.readLine();
                         int capacidade = getInt(in,"Capacidade:");
-                        demultiplexer.sendVoo(5, username, origem, destino, capacidade);
+                        demultiplexer.sendVoo(tag, username, origem, destino, capacidade);
+                        String resposta = new String(demultiplexer.receive(tag));
+                        if (resposta.startsWith("ERRO")) System.out.println(resposta);
+                        else System.out.println("Voo adicionado com sucesso");
+
                         break;
                     }
                     case "2": {
+                        tag = Constantes.encerrarDia;
                         //Encerrar dia
                         System.out.println("ENCERRAR DIA");
                         LocalDate date = askData(in,"Data");
@@ -254,13 +271,14 @@ public class Cliente {
                         break;
                     }
                     case "3": {
+                        tag = Constantes.terminarSessao;
                         //Terminar sessao
                         demultiplexer.send(10,username);
                         out = true;
                         break;
                     }
                 }
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
             if(!out) pressAnyKeyToContinue();
@@ -287,16 +305,19 @@ public class Cliente {
                     System.out.println("2.Criar Conta");
                     prompt();
                     opcao = in.readLine();
+                    int tag;
                     switch (opcao) {
                         case "1": {
+                            tag = Constantes.iniciarSessao;
+                            //Iniciar Sessão
                             clearScreen();
                             System.out.println("INICIAR SESSÃO");
                             System.out.print("Username:");
                             username = in.readLine();
                             System.out.print("Password:");
                             String pass = in.readLine();
-                            demultiplexer.sendString(0,username,pass);
-                            String resposta = new String(demultiplexer.receive(0));
+                            demultiplexer.sendString(tag,username,pass);
+                            String resposta = new String(demultiplexer.receive(tag));
                             if (!resposta.startsWith("ERRO")) {
                                 loggedIn = true;
                                 if (resposta.equals("OK_ADMIN")) isAdmin = true;
@@ -305,14 +326,16 @@ public class Cliente {
                             break;
                         }
                         case "2": {
+                            tag = Constantes.criarConta;
+                            //CRIAR CONTA
                             clearScreen();
                             System.out.println("CRIAR CONTA");
                             System.out.print("Introduza o username:");
                             username = in.readLine();
                             System.out.print("Introduza a password:");
                             String pass = in.readLine();
-                            demultiplexer.sendString(1,username,pass);
-                            String resposta = new String(demultiplexer.receive(1));
+                            demultiplexer.sendString(tag,username,pass);
+                            String resposta = new String(demultiplexer.receive(tag));
                             if (resposta.equals("OK")){
                                 loggedIn = true;
                                 System.out.println("Conta criada com sucesso");

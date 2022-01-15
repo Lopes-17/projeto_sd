@@ -25,15 +25,10 @@ public class Reservas implements Serializable{
     }
 
 
-    public void adicionarVoo(String origem,String destino, int capacidade){
+    public void adicionarVoo(String origem,String destino, int capacidade) throws Exception {
         try {
             lock.writeLock().lock();
-            locais.putIfAbsent(origem,new Local(origem));
-            locais.putIfAbsent(destino,new Local(destino));
-
-            Voo voo = new Voo(origem,destino,capacidade);
-            locais.get(origem).adicionarDestino(locais.get(destino),voo);
-
+            Voo voo = new Voo(origem, destino, capacidade);
             adicionarVoo(voo);
         }
         finally {
@@ -41,7 +36,7 @@ public class Reservas implements Serializable{
         }
     }
 
-    public void adicionarVoo (Voo voo){
+    public void adicionarVoo (Voo voo) throws Exception{
         try {
             lock.writeLock().lock();
             String origem = voo.getOrigem();
@@ -50,8 +45,19 @@ public class Reservas implements Serializable{
             locais.putIfAbsent(origem, new Local(origem));
             locais.putIfAbsent(destino, new Local(destino));
 
-            locais.get(origem).adicionarDestino(locais.get(destino), voo);
+            Local localOrigem = locais.get(origem);
+            Local localDestino = locais.get(destino);
+
+            if (localOrigem.containsDestino(localDestino))throw new Exception("ERRO - Voo já existe");
+            localOrigem.adicionarDestino(localDestino);
+
             voosDiarios.add(voo);
+
+            for (Map.Entry<LocalDate,List<Voo>> entry : todosVoos.entrySet()){
+                if (!entry.getKey().isBefore(LocalDate.now())) {
+                    entry.getValue().add(voo.clone());
+                }
+            }
         }
         finally {
             lock.writeLock().unlock();
@@ -80,17 +86,17 @@ public class Reservas implements Serializable{
     public Viagem marcarViagem(List<String>destinos,LocalDate inicio, LocalDate fim) throws Exception {
         try {
             lock.writeLock().lock();
-            String origem = destinos.get(0);
-            List<Voo> listVoo = new ArrayList<>();
             for (LocalDate date = inicio; date.isBefore(fim) || date.isEqual(fim); date = date.plusDays(1)) {
-                System.out.println("DIA ->" + date);
-                for (int i = 1; i < destinos.size(); i++) {
-                    todosVoos.putIfAbsent(date,cloneVoosDiarios());
+                List<Voo> listVoo = new ArrayList<>(); //List dos possiveis voos | reset para cada dia
+                String origem = destinos.get(0);
+                int lenDestinos = destinos.size();
+                for (int i = 1; i < lenDestinos; i++) {
+                    todosVoos.putIfAbsent(date,cloneVoosDiarios());//put info num dia que ainda não tinha (? maybe remove if it's not used)
                     List<Voo> voosDia = todosVoos.get(date);
                     String destino = destinos.get(i);
                     for (Voo voo : voosDia) {
-                        if (voo.isCancelado()) break;
-                        if (voo.semLugares()) continue;
+                        if (voo.isCancelado()) break; //significa que esse dia foi cancelado
+                        if (voo.semLugares()) continue; // capacidade do voo é 0
                         if (voo.getOrigem().equals(origem) && voo.getDestino().equals(destino)) {
                             listVoo.add(voo);
                             origem = destino;
@@ -98,7 +104,7 @@ public class Reservas implements Serializable{
                         }
                     }
                 }
-                if (listVoo.size() == destinos.size() - 1) {
+                if (listVoo.size() == destinos.size() - 1) {//para x destinos é preciso x-1 voos
                     int numReserva = todasViagens.size();
                     Viagem viagem = new Viagem(numReserva, listVoo, date);
                     todasViagens.putIfAbsent(date, new ArrayList<>());
