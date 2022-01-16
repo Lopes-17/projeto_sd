@@ -26,14 +26,8 @@ public class Reservas implements Serializable{
 
 
     public void adicionarVoo(String origem,String destino, int capacidade) throws Exception {
-        try {
-            lock.writeLock().lock();
-            Voo voo = new Voo(origem, destino, capacidade);
-            adicionarVoo(voo);
-        }
-        finally {
-            lock.writeLock().unlock();
-        }
+        Voo voo = new Voo(origem, destino, capacidade);
+        adicionarVoo(voo);
     }
 
     public void adicionarVoo (Voo voo) throws Exception{

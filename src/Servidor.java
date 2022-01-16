@@ -98,13 +98,14 @@ public class Servidor {
 
         public void run() {
             boolean out = false;
+            String username = null;
             while (!out) {
                 try {
                     Connection.FrameServidor frame = connection.receive();
                     int tag = frame.tag;
+                    username = frame.username;
                     if (tag == Constantes.iniciarSessao) {
 
-                        String username = frame.username;
                         String password = (String) frame.data;
                         System.out.println(username);
                         System.out.println(password);
@@ -123,7 +124,6 @@ public class Servidor {
                     }
 
                     if (tag == Constantes.criarConta) {
-                        String username = frame.username;
                         String password = (String) frame.data;
                         try {
                             contas.adicionarUser(username, password);
@@ -142,7 +142,7 @@ public class Servidor {
                             try {
                                 Viagem viagem = reservas.marcarViagem(listDestinos,percursoCliente.inicio,percursoCliente.fim);
                                 connection.send(tag,String.valueOf(viagem.getIdReserva()).getBytes());
-                                contas.addViagem(frame.username,viagem);
+                                contas.addViagem(username,viagem);
                                 System.out.println(viagem);
                             }
                             catch (Exception e){
@@ -158,7 +158,6 @@ public class Servidor {
 
                     if (tag == Constantes.cancelarViagem){
                         int id = Integer.parseInt((String) frame.data);
-                        String username = frame.username;
                         try {
                             contas.cancelaViagem(username, id);
                             connection.send(tag,  "OK".getBytes());
@@ -205,7 +204,7 @@ public class Servidor {
                         reservas.cancelarDia(date);
                     }
                     if (tag == Constantes.viagensReservadas){
-                        List<Viagem> viagens = contas.getViagens(frame.username);
+                        List<Viagem> viagens = contas.getViagens(username);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ObjectOutputStream oos = new ObjectOutputStream(baos);
                         oos.writeInt(viagens.size());
@@ -228,9 +227,9 @@ public class Servidor {
                         System.out.println(viagens);
                     }
                     if (tag == Constantes.allPercursos){
-                        String origem = frame.username;
+                        //String origem = username;
                         String destino = (String) frame.data;
-                        List<List<String>> allCaminhos = reservas.getAllCaminhos(origem,destino);
+                        List<List<String>> allCaminhos = reservas.getAllCaminhos(username,destino);
                         Map<String,Short> mapLocais = new HashMap<>();
                         short size = 0;
                         for (List<String> caminho : allCaminhos){
@@ -264,7 +263,12 @@ public class Servidor {
                         writeFile(contas,reservas);
                         out = true;
                     }
-                } catch (Exception e) {
+                }catch(EOFException ignored){
+                    if (username != null)contas.logout(username);
+                    writeFile(contas,reservas);
+                    out = true;
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
