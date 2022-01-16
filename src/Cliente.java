@@ -75,7 +75,10 @@ public class Cliente {
                         }
                         System.out.println("INTERVALO DE DATAS");
                         LocalDate inicio = askData(in,"Inicio:");
-                        LocalDate fim = askData(in,"Fim:");
+                        LocalDate fim;
+                        do {
+                            fim = askData(in,"Fim:");
+                        }while (fim.isBefore(inicio));
                         PercursoCliente percursoCliente = new PercursoCliente(listVoos,inicio,fim);
                         demultiplexer.sendViagem(tag,username,percursoCliente);
                         String resposta = new String(demultiplexer.receive(tag));

@@ -18,10 +18,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Servidor {
 
-    private static ServerSocket ss;
-
-    private static String reservasFile = "reservas.ser";
-    private static String contasFile = "contas.ser";
+    private static final String reservasFile = "reservas.ser";
+    private static final String contasFile = "contas.ser";
 
     public static void main(String[] args) {
         try {
@@ -43,7 +41,6 @@ public class Servidor {
             }
 
 
-            //reservas.serialize("reservas.ser");
 
             Contas contas;
             if (!Files.exists(Paths.get(contasFile))){
@@ -52,30 +49,13 @@ public class Servidor {
                 contas.serialize("contas.ser");
             }
             else contas = Contas.deserialize(contasFile);
-            ss = new ServerSocket(12345);
+            ServerSocket ss = new ServerSocket(12345);
 
-            //if (reservas.getAllCaminhos("Porto","Paris")) return;
             while (true) {
                 Socket socket = ss.accept();
                 Connection connection = new Connection(socket);
                 Worker worker = new Worker(connection,contas,reservas);
                 new Thread(worker).start();
-
-                /*
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream());
-
-                String line;
-                while ((line = in.readLine()) != null) {
-                    out.println(line);
-                    out.flush();
-                }
-
-                 */
-
-                //socket.shutdownOutput();
-                //socket.shutdownInput();
-                //socket.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,7 +67,7 @@ public class Servidor {
         private final Connection connection;
         private final Contas contas;
         private final Reservas reservas;
-        private ReentrantLock lock = new ReentrantLock();
+        private final ReentrantLock lock = new ReentrantLock();
 
         public Worker(Connection connection,Contas contas, Reservas reservas){
             this.connection = connection;
@@ -107,8 +87,6 @@ public class Servidor {
                     if (tag == Constantes.iniciarSessao) {
 
                         String password = (String) frame.data;
-                        System.out.println(username);
-                        System.out.println(password);
                         try {
                             boolean loginValido = contas.autenticarUser(username, password);
                             if (loginValido) {
@@ -118,7 +96,6 @@ public class Servidor {
                             else connection.send(tag,  "ERRO - Palavra passe errada".getBytes());
                         }
                         catch (Exception e){
-                            System.out.println("ERRO");
                             connection.send(tag,e.getMessage().getBytes());
                         }
                     }
@@ -131,7 +108,6 @@ public class Servidor {
                         }
                         catch (Exception e){
                             connection.send(tag,"Já existe um utilizador com esse username".getBytes());
-                            System.out.println("ERRO");
                         }
                     }
 
@@ -150,7 +126,6 @@ public class Servidor {
                             }
                         }
                         else{
-                            System.out.println("ERRO");
                             connection.send(tag,"ERRO - Destino(s) inválido(s)".getBytes());
                         }
 
@@ -164,7 +139,6 @@ public class Servidor {
                         }
                         catch (Exception e){
                             connection.send(tag,  e.getMessage().getBytes());
-                            System.out.println("ERRO");
                         }
                     }
                     if (tag == Constantes.voosExistentes){
@@ -175,7 +149,6 @@ public class Servidor {
                             ObjectOutputStream oos = new ObjectOutputStream(baos);
                             oos.writeInt(voosDiarios.size());
                             for (Voo voo : voosDiarios){
-                                System.out.println("CAPACIDADE ->" + voo.getCapacidade());
                                 String origem = voo.getOrigem();
                                 String destino = voo.getDestino();
                                 oos.writeUTF(origem);
@@ -191,11 +164,9 @@ public class Servidor {
                         Voo voo = (Voo)frame.data;
                         try {
                             reservas.adicionarVoo(voo);
-                            System.out.println("OKAY");
                             connection.send(tag, "OK".getBytes());
                         }
                         catch (Exception e){
-                            System.out.println("ERRO");
                             connection.send(tag,e.getMessage().getBytes());
                         }
                     }
@@ -224,7 +195,6 @@ public class Servidor {
                         oos.flush();
                         byte[] bytes= baos.toByteArray();
                         connection.send(tag, bytes);
-                        System.out.println(viagens);
                     }
                     if (tag == Constantes.allPercursos){
                         //String origem = username;
@@ -279,7 +249,6 @@ public class Servidor {
                 lock.lock();
                 contas.serialize(contasFile);
                 reservas.serialize(reservasFile);
-                System.out.println("WRITE FILE");
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
